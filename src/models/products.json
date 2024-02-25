@@ -71,7 +71,7 @@
     "price": 22,
     "code": "Y09",
     "stock": 20,
-    "category": "Almacen",
+    "category": "Lacteos",
     "status": true,
     "thumbnails": "img/fotoYogurt.jpg",
     "id": 7
@@ -82,7 +82,7 @@
     "price": 28,
     "code": "M40",
     "stock": 20,
-    "category": "Almacen",
+    "category": "Lacteos",
     "status": true,
     "thumbnails": "img/fotoManteca.jpg",
     "id": 8
@@ -93,7 +93,7 @@
     "price": 30,
     "code": "L01",
     "stock": 20,
-    "category": "Almacen",
+    "category": "Lacteos",
     "status": true,
     "thumbnails": "img/fotoLeche.jpg",
     "id": 9
