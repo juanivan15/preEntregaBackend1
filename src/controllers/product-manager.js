@@ -8,11 +8,11 @@ class ProductManager {
     this.path = path;
   }
 
-  async addProduct({ title, description, price, thumbnail, code, stock }) {
+  async addProduct({ title, description, price, thumbnail, code, stock, category }) {
     try {
       const products = await this.readFromFile();
 
-      if (!title || !description || !price || !thumbnail || !code || !stock ) {
+      if (!title || !description || !price || !category || !code || !stock ) {
         console.log("Todos los campos son obligatorios");
         return;
       }
@@ -28,6 +28,7 @@ class ProductManager {
         price,
         code,
         stock,
+        category,
         status: true,
         thumbnails: thumbnail || []
       };

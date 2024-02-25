@@ -5,6 +5,7 @@
     "price": 2,
     "code": "A02",
     "stock": 20,
+    "category": "Almacen",
     "status": true,
     "thumbnails": "img/fotoAzucar.jpg",
     "id": 1
@@ -15,6 +16,7 @@
     "price": 3,
     "code": "Y01",
     "stock": 25,
+    "category": "Almacen",
     "status": true,
     "thumbnails": "img/fotoYerba.jpg",
     "id": 2
@@ -25,6 +27,7 @@
     "price": 10,
     "code": "F02",
     "stock": 20,
+    "category": "Almacen",
     "status": true,
     "thumbnails": "img/fotoFideos.jpg",
     "id": 3
@@ -35,6 +38,7 @@
     "price": 15,
     "code": "A10",
     "stock": 20,
+    "category": "Almacen",
     "status": true,
     "thumbnails": "img/fotoArroz.jpg",
     "id": 4
@@ -45,6 +49,7 @@
     "price": 25,
     "code": "G01",
     "stock": 20,
+    "category": "Almacen",
     "status": true,
     "thumbnails": "img/fotoGalletas.jpg",
     "id": 5
@@ -55,6 +60,7 @@
     "price": 18,
     "code": "M01",
     "stock": 20,
+    "category": "Almacen",
     "status": true,
     "thumbnails": "img/fotoMermelada.jpg",
     "id": 6
@@ -65,6 +71,7 @@
     "price": 22,
     "code": "Y09",
     "stock": 20,
+    "category": "Almacen",
     "status": true,
     "thumbnails": "img/fotoYogurt.jpg",
     "id": 7
@@ -75,6 +82,7 @@
     "price": 28,
     "code": "M40",
     "stock": 20,
+    "category": "Almacen",
     "status": true,
     "thumbnails": "img/fotoManteca.jpg",
     "id": 8
@@ -85,6 +93,7 @@
     "price": 30,
     "code": "L01",
     "stock": 20,
+    "category": "Almacen",
     "status": true,
     "thumbnails": "img/fotoLeche.jpg",
     "id": 9
@@ -95,6 +104,7 @@
     "price": 45,
     "code": "A90",
     "stock": 20,
+    "category": "Almacen",
     "status": true,
     "thumbnails": "img/fotoAceite.jpg",
     "id": 10
@@ -105,6 +115,7 @@
     "price": 55,
     "code": "C7",
     "stock": 40,
+    "category": "Almacen",
     "status": true,
     "thumbnails": "img/fotoCocaCola.jpg",
     "id": 12
