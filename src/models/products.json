@@ -1,16 +1,5 @@
 [
   {
-    "title": "Azucar",
-    "description": "Para endulzar tu vida",
-    "price": 2,
-    "code": "A02",
-    "stock": 20,
-    "category": "Almacen",
-    "status": true,
-    "thumbnails": "img/fotoAzucar.jpg",
-    "id": 1
-  },
-  {
     "title": "Yerba",
     "description": "Tus mejores mates",
     "price": 3,
@@ -119,5 +108,16 @@
     "status": true,
     "thumbnails": "img/fotoCocaCola.jpg",
     "id": 12
+  },
+  {
+    "title": "Azucar",
+    "description": "Para endulzar tu vida",
+    "price": 50,
+    "code": "A01",
+    "stock": 25,
+    "category": "Almacen",
+    "status": true,
+    "thumbnails": "img/fotoAzucar.jpg",
+    "id": 13
   }
 ]
