@@ -1,14 +1,26 @@
 const express = require("express");
 const router = express.Router();
 const ProductManager = require("../controllers/product-manager.js");
-const productManager = new ProductManager("./src/models/products.json");
+const productManager = new ProductManager();
+const ProductModel = require("../models/product.model.js");
 
 
 router.get("/", async (req, res) => {
   try {
-    const products = await productManager.getProducts();
+    const products = await ProductModel.find();
 
-    res.render("home", {productos: products, titulo: "Mis productos"});
+    const arrayProducts = products.map(product => {
+      return{
+        id: product._id,
+        title: product.title,
+        price: product.price,
+        code: product.code,
+        stock: product.stock,
+        category: product.category
+      }
+    })
+
+    res.render("home", {productos: arrayProducts, titulo: "Mis productos"});
     
   } catch (error) {
     console.log("No se pudo conectar con el archivo", error);
@@ -23,5 +35,10 @@ router.get("/realTimeProducts", (req, res) => {
     res.status(500).json({ error: error });
   }
 })
+
+router.get("/chat", async (req, res) => {
+  res.render("chat");
+})
+
 
 module.exports = router;

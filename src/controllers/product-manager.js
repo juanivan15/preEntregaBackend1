@@ -1,28 +1,23 @@
-const fs = require("fs").promises;
+const ProductModel = require("../models/product.model.js");
 
 class ProductManager {
-  static lastId = 0;
-
-  constructor(path) {
-    this.products = [];
-    this.path = path;
-  }
 
   async addProduct({ title, description, price, thumbnail, code, stock, category }) {
     try {
-      const products = await this.readFromFile();
 
       if (!title || !description || !price || !category || !code || !stock ) {
         console.log("Todos los campos son obligatorios");
         return;
       }
 
-      if (products.some(item => item.code === code)) {
+      const productExists = await ProductModel.findOne({code:code});
+
+      if (productExists) {
         console.log("El código debe ser único");
         return;
       }
 
-      const newProduct = {
+      const newProduct = new ProductModel({
         title,
         description,
         price,
@@ -31,79 +26,54 @@ class ProductManager {
         category,
         status: true,
         thumbnails: thumbnail || []
-      };
+      });
 
-      if (products.length > 0) {
-        ProductManager.lastId = products.reduce((maxId, product) => Math.max(maxId, product.id), 0);
-      }
+      await newProduct.save();
 
-      newProduct.id = ++ProductManager.lastId; 
-      products.push(newProduct);
-      await this.saveToFile(products);
     } catch (error) {
-      console.log("Error al agregar producto", error);
+      console.log("Error al guardar producto", error);
       throw error; 
     }
   }
   
   async getProducts() {
     try {
-      const products = await this.readFromFile();
+      const products = await ProductModel.find();
       return products;
     } catch (error) {
-      console.log("Error al leer el archivo", error);
+      console.log("Error al leer la base de datos", error);
       throw error;
     }
   }
 
   async getProductById(id) {
     try {
-      const products = await this.readFromFile();
-      const wantedProduct = products.find(item => item.id === id);
-      if (!wantedProduct) {
+      const product = await ProductModel.findById(id);
+      if (!product) {
         console.log("Producto no encontrado");
         return null;
       } else {
         console.log("Producto encontrado");
-        return wantedProduct;
+        return product;
       }
     } catch (error) {
-      console.log("Error al leer el archivo", error);
-      throw error;
-    }
-  }
-
-  async readFromFile() {
-    try {
-      const answer = await fs.readFile(this.path, "utf-8");
-      const products = JSON.parse(answer);
-      return products;
-    } catch (error) {
-      console.log("Error al leer un archivo", error);
-      throw error;
-    }
-  }
-
-  async saveToFile(products) {
-    try {
-      await fs.writeFile(this.path, JSON.stringify(products, null, 2));
-    } catch (error) {
-      console.log("Error al guardar el archivo", error);
+      console.log("Error al buscar producto", error);
       throw error;
     }
   }
 
   async updateProduct(id, updatedProduct) {
     try {
-      const products = await this.readFromFile();
-      const index = products.findIndex(item => item.id === id);
-      if (index !== -1) {
-        products[index] = { ...products[index], ...updatedProduct };
-        await this.saveToFile(products);
-        console.log("Producto actualizado");
-      } else {
-        console.log("No se encontró el producto");
+
+      const updateProduct = await ProductModel.findByIdAndUpdate(id, updatedProduct)  
+      if(!updateProduct){
+        console.log("Producto no encontrado!");
+        return null;
       }
+
+      console.log("Producto actualizado correctamente!");
+      return updateProduct;
+
     } catch (error) {
       console.log("Error al actualizar el producto", error);
       throw error;
@@ -112,15 +82,16 @@ class ProductManager {
 
   async deleteProduct(id) {
     try {
-      const products = await this.readFromFile();
-      const index = products.findIndex(item => item.id === id);
-      if (index !== -1) {
-        products.splice(index, 1);
-        await this.saveToFile(products);
-        console.log("Producto eliminado");
-      } else {
-        console.log("No se encontró el producto");
-      }
+
+        const deleteProduct = await ProductModel.findByIdAndDelete(id);
+
+        if(!deleteProduct){
+          console.log("Producto no encontrado!");
+          return null;
+        }
+        
+        console.log("Producto eliminado correctamente!");
+
     } catch (error) {
       console.log("Error al eliminar el producto", error);
       throw error;

@@ -14,6 +14,8 @@ const cartsRouter = require("./routes/carts.router.js");
 
 const viewsRouter = require("./routes/views.router.js");
 
+require("./database.js");
+
 //Config handlebars
 
 app.engine("handlebars", exphbs.engine());
@@ -46,11 +48,15 @@ const httpServer = app.listen(PORT, () =>{
     console.log(`Escuchando en http://localhost:${PORT}`);
 })
 
+//Chat:
+
+const MessageModel = require("./models/message.model.js");
+
 //Busco los productos:
 
 const ProductManager = require("./controllers/product-manager.js");
-
-const productManager = new ProductManager("./src/models/products.json");
+const ProductModel = require("./models/product.model.js");
+const productManager = new ProductManager();
 
 //Socket.io: 
 
@@ -77,19 +83,31 @@ io.on("connection", async (socket) => {
     });
   
     socket.on("addProduct", async (product) => {
-        
       try {
-        await productManager.addProduct(product);
+          const existingProduct = await ProductModel.findOne({ code: product.code });
+          if (existingProduct) {
+              throw new Error("El código del producto ya está en uso.");
+          }
+          
+          await productManager.addProduct(product);
+  
+          const products = await productManager.getProducts();
+  
+          io.sockets.emit("products", products);
 
-        const products = await productManager.getProducts();
-
-        io.sockets.emit("products", products);
+          console.log("Producto agregado exitosamente!");
 
       } catch (error) {
 
-        console.log("Error al cargar producto");
-
+          console.log("Error al cargar producto:", error.message);
       }
-    });
+  });
+    socket.on("message", async (data) => {
+        
+    await MessageModel.create(data);
+
+    const messages = await MessageModel.find();
+    io.sockets.emit("message", messages)  
+  })
   
 });

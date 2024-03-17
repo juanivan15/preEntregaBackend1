@@ -1,6 +1,6 @@
  console.log("En funcionamiento");
  
- const socket = io()
+ const socket = io();
 
  socket.on("products", (data) => {
     const productsList = document.getElementById("productsList");
@@ -11,17 +11,18 @@
       <h3>Titulo : ${product.title}</h3>
       <p>Descripción : ${product.description}</p>
       <p>$${product.price}</p>
-      <button class='deleteButton'>Eliminar</button>
+      <button class='deleteButton' data-product-id="${product._id}">Eliminar</button>
       </div>
       `;
     });
   
     //Eliminar
     const deleteButtons = document.querySelectorAll(".deleteButton");
-    deleteButtons.forEach((button, index) => {
-      button.addEventListener("click", () => {
-        deleteProduct(data[index].id);
-      });
+    deleteButtons.forEach((button) => {
+    button.addEventListener("click", (event) => {
+    const productId = event.target.dataset.productId;
+    deleteProduct(productId);
+    });
     });
   
     //Agregar
@@ -71,3 +72,39 @@
       console.error("Complete todos los campos");
     }
   };
+
+  let user;
+
+const chatBox = document.getElementById("chatBox");
+
+Swal.fire({
+    title: "Identificación",
+    input: "text",
+    text: "Ingrese un usuario para identificarse en el chat",
+    inputValidator: (value) => {
+        return !value && "Necesitas escribir un nombre para continuar"
+    },
+    allowOutsideClick: false
+}).then(result => {
+    user = result.value;
+    console.log(user);
+})
+
+
+chatBox.addEventListener("keyup", (event) => {
+    if (event.key === "Enter") {
+        if (chatBox.value.trim().length > 0) {
+            socket.emit("message", { user: user, message: chatBox.value });
+            chatBox.value = "";
+        }
+    }
+})
+
+socket.on("message", (data) => {
+    let log = document.getElementById("messagesLogs");
+    let messages = "";
+    data.forEach(message => {
+        messages = messages + `${message.user} dice: ${message.message} <br>`;
+    })
+    log.innerHTML = messages;
+})

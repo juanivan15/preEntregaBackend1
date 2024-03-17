@@ -67,3 +67,27 @@ h2{
     border-radius: 4px; 
     cursor: pointer;
 }
+
+header{
+  background-color: rgb(14, 51, 77);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 20px 10%;
+  top: 0;
+}
+
+li{
+  display: inline-block;
+  font-size: 1.2rem;
+  color: aliceblue;
+  font-weight: bold;
+}
+a{
+  text-decoration: none;
+  color: aliceblue;
+  padding: 0px 20px;
+}
+a:hover{
+  color: black;
+}

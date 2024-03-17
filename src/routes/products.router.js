@@ -1,18 +1,17 @@
 const express = require("express");
 const router = express.Router();
 const ProductManager = require("../controllers/product-manager.js");
-const productManager = new ProductManager("./src/models/products.json");
-
+const productManager = new ProductManager();
 //1) Listar todos los productos:
 
 router.get("/", async (req, res) => {
     try {
         const limit = req.query.limit;
-        const productos = await productManager.getProducts();
+        const products = await productManager.getProducts();
         if (limit) {
-            res.json(productos.slice(0, limit));
+            res.json(products.slice(0, limit));
         } else {
-            res.json(productos);
+            res.json(products);
         }
     } catch (error) {
         console.error("Error al obtener productos", error);
@@ -28,7 +27,7 @@ router.get("/:pid", async (req, res) => {
     const id = req.params.pid;
 
     try {
-        const product = await productManager.getProductById(parseInt(id));
+        const product = await productManager.getProductById(id);
         if (!product) {
             return res.json({
                 error: "Producto no encontrado"
@@ -68,7 +67,7 @@ router.put("/:pid", async (req, res) => {
     const updatedProduct = req.body;
 
     try {
-        await productManager.updateProduct(parseInt(id), updatedProduct);
+        await productManager.updateProduct(id, updatedProduct);
         res.json({
             message: "Producto actualizado exitosamente"
         });
@@ -86,7 +85,7 @@ router.delete("/:pid", async (req, res) => {
     const id = req.params.pid;
 
     try {
-        await productManager.deleteProduct(parseInt(id));
+        await productManager.deleteProduct(id);
         res.json({
             message: "Producto eliminado exitosamente"
         });
