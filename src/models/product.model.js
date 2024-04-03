@@ -29,6 +29,9 @@ const productSchema = new mongoose.Schema({
         type: Boolean,
         required: true
     },
+    stock: {
+        type: Number
+    },
     thumbnails: {
         type: [String]
     }

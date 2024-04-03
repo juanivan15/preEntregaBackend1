@@ -1,32 +1,66 @@
 const express = require("express");
 const router = express.Router();
 const ProductManager = require("../controllers/product-manager.js");
+const CartManager = require("../controllers/cart-manager.js")
 const productManager = new ProductManager();
-const ProductModel = require("../models/product.model.js");
+const cartManager = new CartManager();
+const CartModel = require("../models/cart.model.js")
 
 
 router.get("/", async (req, res) => {
   try {
-    const products = await ProductModel.find();
+    const { page = 1, limit = 4 } = req.query;
+    const products = await productManager.getProducts({
+      page: parseInt(page),
+      limit: parseInt(limit)
+    });
 
-    const arrayProducts = products.map(product => {
-      return{
-        id: product._id,
-        title: product.title,
-        price: product.price,
-        code: product.code,
-        stock: product.stock,
-        category: product.category
-      }
-    })
+    const arrayProducts = products.docs.map(product => {
+      const { _id, ...rest } = product.toObject();
+      return rest;
+   });
 
-    res.render("home", {productos: arrayProducts, titulo: "Mis productos"});
+
+    res.render("home", {
+      products: arrayProducts,
+      titulo: "Mis productos",
+      hasPrevPage: products.hasPrevPage,
+      hasNextPage: products.hasNextPage,
+      prevPage: products.prevPage,
+      nextPage: products.nextPage,
+      currentPage: products.page,
+      totalPages: products.totalPages
+    });
     
   } catch (error) {
-    console.log("No se pudo conectar con el archivo", error);
+    console.log("No se pudo obtener los productos", error);
     res.status(500).json({error: "Error interno del servidor"});   
   }
 })
+
+router.get("/carts/:cid", async (req, res) => {
+  const cartId = req.params.cid;
+
+  try {
+     const cart = await CartModel.findById(cartId);
+
+     if (!cart) {
+        console.log("No existe el carrito buscado");
+        return res.status(404).json({ error: "Carrito no encontrado" });
+     }
+
+     const productsOnCart = cart.products.map(item => ({
+      product: item.product.toObject(), 
+      quantity: item.quantity
+    }));
+    
+    
+    res.render("carts", { products: productsOnCart });
+  } catch (error) {
+     console.error("Error al obtener el carrito", error);
+     res.status(500).json({ error: "Error interno del servidor" });
+  }
+});
 
 router.get("/realTimeProducts", (req, res) => {
   try {

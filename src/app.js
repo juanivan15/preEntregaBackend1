@@ -68,15 +68,15 @@ io.on("connection", async (socket) => {
 
     console.log("Un cliente se ha conectado");
 
-    const products = await productManager.getProducts();
+    const products = await ProductModel.find();
 
     socket.emit("products", products);
   
     socket.on("deleteProduct", async (id) => {
 
-      await productManager.deleteProduct(id);
+      await ProductModel.findByIdAndDelete(id);
 
-      const products = await productManager.getProducts();
+      const products = await ProductModel.find();
 
       io.sockets.emit("products", products);
 
